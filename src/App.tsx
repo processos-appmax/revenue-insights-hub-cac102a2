@@ -3,6 +3,9 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { AuthProvider } from "@/contexts/AuthContext";
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import LoginPage from "./pages/LoginPage.tsx";
 import Index from "./pages/Index.tsx";
 import IntegrationsPage from "./pages/IntegrationsPage.tsx";
 import ModelingPage from "./pages/ModelingPage.tsx";
@@ -19,15 +22,18 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/integrations" element={<IntegrationsPage />} />
-          <Route path="/modeling" element={<ModelingPage />} />
-          <Route path="/glossary" element={<GlossaryPage />} />
-          <Route path="/builder" element={<BuilderPage />} />
-          <Route path="/access" element={<AccessPage />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AuthProvider>
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
+            <Route path="/integrations" element={<ProtectedRoute><IntegrationsPage /></ProtectedRoute>} />
+            <Route path="/modeling" element={<ProtectedRoute><ModelingPage /></ProtectedRoute>} />
+            <Route path="/glossary" element={<ProtectedRoute><GlossaryPage /></ProtectedRoute>} />
+            <Route path="/builder" element={<ProtectedRoute><BuilderPage /></ProtectedRoute>} />
+            <Route path="/access" element={<ProtectedRoute><AccessPage /></ProtectedRoute>} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

@@ -1,6 +1,7 @@
-import { BarChart3, Database, BookOpen, Layout, Settings, Plug, ChevronLeft, ChevronRight } from "lucide-react";
+import { BarChart3, Database, BookOpen, Layout, Settings, Plug, ChevronLeft, ChevronRight, LogOut } from "lucide-react";
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 const navItems = [
   { icon: BarChart3, label: "Dashboard", path: "/" },
@@ -14,6 +15,13 @@ const navItems = [
 const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { logout, userEmail } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   return (
     <aside
@@ -49,6 +57,22 @@ const Sidebar = () => {
           );
         })}
       </nav>
+
+      {/* User / Logout */}
+      <div className="border-t border-sidebar-border px-2 py-3 space-y-1">
+        {!collapsed && (
+          <p className="px-3 text-xs text-sidebar-foreground/40 truncate animate-fade-in">
+            {userEmail}
+          </p>
+        )}
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50 transition-all duration-200"
+        >
+          <LogOut className="w-5 h-5 shrink-0" />
+          {!collapsed && <span className="animate-fade-in">Sair</span>}
+        </button>
+      </div>
 
       <button
         onClick={() => setCollapsed(!collapsed)}
