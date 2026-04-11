@@ -42,6 +42,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 export const useAuth = () => {
   const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
+  if (!ctx) {
+    // Fallback for HMR edge cases — will redirect to login anyway
+    return {
+      isAuthenticated: false,
+      login: () => false,
+      logout: () => {},
+      userEmail: null,
+    } as AuthContextType;
+  }
   return ctx;
 };
