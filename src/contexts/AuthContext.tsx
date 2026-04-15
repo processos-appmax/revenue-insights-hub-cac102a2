@@ -1,7 +1,16 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 
 const VALID_EMAIL = "alana.carolina@appmax.com.br";
-const VALID_PASSWORD = "Alana102030@";
+const DEFAULT_PASSWORD = "Alana102030@";
+const PASSWORD_OVERRIDE_KEY = "auth_password_override";
+
+function getValidPassword(): string {
+  return localStorage.getItem(PASSWORD_OVERRIDE_KEY) ?? DEFAULT_PASSWORD;
+}
+
+export function updatePassword(newPassword: string): void {
+  localStorage.setItem(PASSWORD_OVERRIDE_KEY, newPassword);
+}
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -20,7 +29,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const isAuthenticated = userEmail !== null;
 
   const login = (email: string, password: string): boolean => {
-    if (email === VALID_EMAIL && password === VALID_PASSWORD) {
+    if (email === VALID_EMAIL && password === getValidPassword()) {
       sessionStorage.setItem("auth_user", email);
       setUserEmail(email);
       return true;
@@ -43,7 +52,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 export const useAuth = () => {
   const ctx = useContext(AuthContext);
   if (!ctx) {
-    // Fallback for HMR edge cases — will redirect to login anyway
     return {
       isAuthenticated: false,
       login: () => false,
@@ -53,3 +61,5 @@ export const useAuth = () => {
   }
   return ctx;
 };
+
+export { VALID_EMAIL };
