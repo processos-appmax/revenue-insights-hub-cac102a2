@@ -5,10 +5,10 @@ import { useAuth } from "@/contexts/AuthContext";
 
 const navItems = [
   { icon: BarChart3, label: "Dashboard", path: "/" },
-  { icon: Plug, label: "Integrações", path: "/integrations" },
+  { icon: Layout, label: "Builder", path: "/builder" },
   { icon: Database, label: "Modelagem", path: "/modeling" },
   { icon: BookOpen, label: "Glossário", path: "/glossary" },
-  { icon: Layout, label: "Builder", path: "/builder" },
+  { icon: Plug, label: "Integrações", path: "/integrations" },
   { icon: Settings, label: "Acessos", path: "/access" },
 ];
 
